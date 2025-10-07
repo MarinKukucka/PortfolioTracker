@@ -1,0 +1,55 @@
+# =========================
+#  .NET / ASP.NET Core
+# =========================
+bin/
+obj/
+*.user
+*.rsuser
+*.suo
+*.cache
+*.log
+*.vs/
+.vscode/
+.idea/
+appsettings.Development.json
+appsettings.Local.json
+
+# EF Core migrations build cache
+Infrastructure/Context/Migrations/__EFMigrationsHistory/
+
+# Rider / JetBrains
+*.sln.iml
+
+# =========================
+#  Node / React / Vite
+# =========================
+node_modules/
+dist/
+.vite/
+vite.config.timestamp-*
+.env
+.env.local
+.env.*.local
+
+# Optional: keep example env
+!.env.example
+
+# =========================
+#  OS Specific
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+#  Database / Logs
+# =========================
+*.db
+*.sqlite
+*.log
+
+# =========================
+#  Misc / Temp
+# =========================
+*.bak
+*.tmp
+*.swp
