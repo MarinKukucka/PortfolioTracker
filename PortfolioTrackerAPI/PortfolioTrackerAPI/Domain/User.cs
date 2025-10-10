@@ -8,7 +8,7 @@
 
         public required string DisplayName { get; set; }
 
-        public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public required DateTime CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
 

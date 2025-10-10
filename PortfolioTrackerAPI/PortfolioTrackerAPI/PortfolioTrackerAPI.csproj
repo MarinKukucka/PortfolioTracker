@@ -4,9 +4,11 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>e01762cf-f726-42f5-ad6e-3242a2b61e8b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
@@ -18,9 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Assets\" />
-    <Folder Include="Features\Portfolios\" />
     <Folder Include="Features\Transactions\" />
-    <Folder Include="Features\Users\" />
     <Folder Include="Infrastructure\Context\Migrations\" />
   </ItemGroup>
 

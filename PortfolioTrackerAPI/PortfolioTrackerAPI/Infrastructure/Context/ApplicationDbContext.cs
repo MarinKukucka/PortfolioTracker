@@ -9,6 +9,14 @@ namespace PortfolioTrackerAPI.Infrastructure.Context
 
         public DbSet<Portfolio> Portfolios { get; set; }
 
+        public DbSet<Asset> Assets { get; set; }
+
+        public DbSet<PortfolioAssets> PortfolioAssets { get; set; }
+
+        public DbSet<Transaction> Transactions { get; set; }
+
+        public DbSet<PriceCache> PriceCaches { get; set; }
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return base.SaveChangesAsync(cancellationToken);
