@@ -1,12 +1,13 @@
-﻿using PortfolioTrackerAPI.Domain;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using PortfolioTrackerAPI.Domain;
 using PortfolioTrackerAPI.Features.Users.DTOs;
-using PortfolioTrackerAPI.Features.Users.Repository;
 using PortfolioTrackerAPI.Infrastructure.Context;
 using System.Security.Claims;
 
 namespace PortfolioTrackerAPI.Features.Users.Service
 {
-    public class UserService(IUserRepository _userRepository, IApplicationDbContext _context) : IUserService
+    public class UserService(IApplicationDbContext _context) : IUserService
     {
         public async Task<UserDTO> GetOrCreateUserAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
         {
@@ -16,8 +17,8 @@ namespace PortfolioTrackerAPI.Features.Users.Service
             var email = principal.FindFirst("email")?.Value;
             var name = principal.FindFirst("name")?.Value;
             
-            var user = await _userRepository.GetByIdAsync(sub, cancellationToken);
-            if(user is null)
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == sub, cancellationToken);
+            if (user is null)
             {
                 user = new User
                 {
@@ -50,7 +51,9 @@ namespace PortfolioTrackerAPI.Features.Users.Service
 
                 if (updated)
                 {
-                    await _userRepository.UpdateAsync(user, cancellationToken);
+                    _context.Users.Update(user);
+
+                    await _context.SaveChangesAsync(cancellationToken);
                 }
 
                 return new UserDTO
@@ -64,7 +67,7 @@ namespace PortfolioTrackerAPI.Features.Users.Service
 
         public async Task<UserDTO?> GetUserByIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            var user = await _userRepository.GetByIdAsync(id, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
             if (user is null) return null;
 
             return new UserDTO

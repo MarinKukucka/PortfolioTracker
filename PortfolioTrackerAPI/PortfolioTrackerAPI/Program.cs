@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using PortfolioTrackerAPI.Features.Users.Repository;
+using PortfolioTrackerAPI.Features.Portfolios.Service;
 using PortfolioTrackerAPI.Features.Users.Service;
 using PortfolioTrackerAPI.Infrastructure.Context;
 using PortfolioTrackerAPI.Infrastructure.Services.ApiServices.CoinGecko;
@@ -42,7 +42,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
