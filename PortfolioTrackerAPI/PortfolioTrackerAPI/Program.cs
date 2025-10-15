@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using PortfolioTrackerAPI.Features.Users.Repository;
 using PortfolioTrackerAPI.Features.Users.Service;
 using PortfolioTrackerAPI.Infrastructure.Context;
+using PortfolioTrackerAPI.Infrastructure.Services.ApiServices.CoinGecko;
+using PortfolioTrackerAPI.Infrastructure.Services.ApiServices.Finnhub;
 
 var builder = WebApplication.CreateBuilder(args);
-var config = builder.Configuration;
 
 // Add services to the container.
 
@@ -16,19 +17,49 @@ builder.Services.AddOpenApi();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = $"https://{config["Auth0:Domain"]}/"; 
-        options.Audience = config["Auth0:Audience"];    
+        options.Authority = $"https://{builder.Configuration["Auth0:Domain"]}/"; 
+        options.Audience = builder.Configuration["Auth0:Audience"];    
     });
+
+var finnhubApiKey = builder.Configuration["Finnhub:ApiKey"];
+builder.Services.AddHttpClient<IFinnhubService, FinnhubService>(client =>
+{
+    client.BaseAddress = new Uri("https://finnhub.io/api/v1/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    if (!string.IsNullOrWhiteSpace(finnhubApiKey))
+        client.DefaultRequestHeaders.Add("X-Finnhub-Token", finnhubApiKey);
+});
+
+builder.Services.AddHttpClient<ICoinGeckoService, CoinGeckoService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.coingecko.com/api/v3/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+    try
+    {
+        await initialiser.InitialiseAsync();
+        await initialiser.SeedAsync();
+    }
+    catch (Exception)
+    {
+        throw;
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

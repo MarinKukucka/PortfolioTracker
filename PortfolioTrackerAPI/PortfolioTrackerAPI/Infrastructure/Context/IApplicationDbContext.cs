@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using PortfolioTrackerAPI.Domain;
 
 namespace PortfolioTrackerAPI.Infrastructure.Context
@@ -18,5 +19,7 @@ namespace PortfolioTrackerAPI.Infrastructure.Context
         public DbSet<PriceCache> PriceCaches { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+        Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

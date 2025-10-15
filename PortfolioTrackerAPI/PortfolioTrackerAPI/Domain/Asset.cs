@@ -11,6 +11,8 @@ namespace PortfolioTrackerAPI.Domain
 
         public required AssetType Type { get; set; }
 
+        public required string ExternalId { get; set; }
+
 
         public List<Portfolio> Portfolios { get; set; } = [];
 

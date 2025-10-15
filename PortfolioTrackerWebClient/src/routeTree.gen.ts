@@ -10,40 +10,54 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthorizedRoutesRouteImport } from './routes/_authorizedRoutes'
-import { Route as AuthorizationLoginRouteImport } from './routes/_authorization/Login'
+import { Route as PublicRoutesIndexRouteImport } from './routes/_publicRoutes/index'
+import { Route as AuthorizedRoutesDashboardRouteImport } from './routes/_authorizedRoutes/Dashboard'
 
 const AuthorizedRoutesRoute = AuthorizedRoutesRouteImport.update({
   id: '/_authorizedRoutes',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthorizationLoginRoute = AuthorizationLoginRouteImport.update({
-  id: '/_authorization/Login',
-  path: '/Login',
+const PublicRoutesIndexRoute = PublicRoutesIndexRouteImport.update({
+  id: '/_publicRoutes/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthorizedRoutesDashboardRoute =
+  AuthorizedRoutesDashboardRouteImport.update({
+    id: '/Dashboard',
+    path: '/Dashboard',
+    getParentRoute: () => AuthorizedRoutesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/Login': typeof AuthorizationLoginRoute
+  '/Dashboard': typeof AuthorizedRoutesDashboardRoute
+  '/': typeof PublicRoutesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/Login': typeof AuthorizationLoginRoute
+  '/Dashboard': typeof AuthorizedRoutesDashboardRoute
+  '/': typeof PublicRoutesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_authorizedRoutes': typeof AuthorizedRoutesRoute
-  '/_authorization/Login': typeof AuthorizationLoginRoute
+  '/_authorizedRoutes': typeof AuthorizedRoutesRouteWithChildren
+  '/_authorizedRoutes/Dashboard': typeof AuthorizedRoutesDashboardRoute
+  '/_publicRoutes/': typeof PublicRoutesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/Login'
+  fullPaths: '/Dashboard' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/Login'
-  id: '__root__' | '/_authorizedRoutes' | '/_authorization/Login'
+  to: '/Dashboard' | '/'
+  id:
+    | '__root__'
+    | '/_authorizedRoutes'
+    | '/_authorizedRoutes/Dashboard'
+    | '/_publicRoutes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthorizedRoutesRoute: typeof AuthorizedRoutesRoute
-  AuthorizationLoginRoute: typeof AuthorizationLoginRoute
+  AuthorizedRoutesRoute: typeof AuthorizedRoutesRouteWithChildren
+  PublicRoutesIndexRoute: typeof PublicRoutesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -55,19 +69,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedRoutesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authorization/Login': {
-      id: '/_authorization/Login'
-      path: '/Login'
-      fullPath: '/Login'
-      preLoaderRoute: typeof AuthorizationLoginRouteImport
+    '/_publicRoutes/': {
+      id: '/_publicRoutes/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRoutesIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authorizedRoutes/Dashboard': {
+      id: '/_authorizedRoutes/Dashboard'
+      path: '/Dashboard'
+      fullPath: '/Dashboard'
+      preLoaderRoute: typeof AuthorizedRoutesDashboardRouteImport
+      parentRoute: typeof AuthorizedRoutesRoute
     }
   }
 }
 
+interface AuthorizedRoutesRouteChildren {
+  AuthorizedRoutesDashboardRoute: typeof AuthorizedRoutesDashboardRoute
+}
+
+const AuthorizedRoutesRouteChildren: AuthorizedRoutesRouteChildren = {
+  AuthorizedRoutesDashboardRoute: AuthorizedRoutesDashboardRoute,
+}
+
+const AuthorizedRoutesRouteWithChildren =
+  AuthorizedRoutesRoute._addFileChildren(AuthorizedRoutesRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  AuthorizedRoutesRoute: AuthorizedRoutesRoute,
-  AuthorizationLoginRoute: AuthorizationLoginRoute,
+  AuthorizedRoutesRoute: AuthorizedRoutesRouteWithChildren,
+  PublicRoutesIndexRoute: PublicRoutesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

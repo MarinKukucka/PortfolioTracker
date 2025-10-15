@@ -2,7 +2,7 @@
 {
     public enum AssetType
     {
-        Stock,
+        Stock = 1,
         CryptoCurrency,
         PreciousMetal,
     }

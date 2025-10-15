@@ -1,4 +1,5 @@
-import { Menu, Switch, type MenuProps } from "antd";
+import { useAuth0 } from "@auth0/auth0-react";
+import { Button, Menu, Switch, type MenuProps } from "antd";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -15,6 +16,8 @@ function SiderMenu({
     darkMode,
     setDarkMode,
 }: Props) {
+    const { logout } = useAuth0();
+
     const items: MenuItem[] = [
         {
             key: "themeMode",
@@ -24,6 +27,20 @@ function SiderMenu({
                     unCheckedChildren={"SUN"}
                     onChange={() => setDarkMode(!darkMode)}
                 />
+            ),
+        },
+        {
+            key: "logout",
+            label: (
+                <Button
+                    onClick={() =>
+                        logout({
+                            logoutParams: { returnTo: window.location.origin },
+                        })
+                    }
+                >
+                    Log out
+                </Button>
             ),
         },
     ];

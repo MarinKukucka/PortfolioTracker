@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using PortfolioTrackerAPI.Domain;
 
 namespace PortfolioTrackerAPI.Infrastructure.Context
@@ -17,14 +18,19 @@ namespace PortfolioTrackerAPI.Infrastructure.Context
 
         public DbSet<PriceCache> PriceCaches { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return base.SaveChangesAsync(cancellationToken);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            base.OnModelCreating(modelBuilder);
+            return await Database.BeginTransactionAsync();
         }
     }
 }

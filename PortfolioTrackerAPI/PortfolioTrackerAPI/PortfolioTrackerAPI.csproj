@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Features\Assets\" />
     <Folder Include="Features\Transactions\" />
-    <Folder Include="Infrastructure\Context\Migrations\" />
   </ItemGroup>
 
 </Project>
