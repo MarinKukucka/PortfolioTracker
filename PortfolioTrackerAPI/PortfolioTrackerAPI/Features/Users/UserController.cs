@@ -17,7 +17,7 @@ namespace PortfolioTrackerAPI.Features.Users
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(string id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetUserById(string id, CancellationToken cancellationToken)
         {
             var user = await _userService.GetUserByIdAsync(id, cancellationToken);
             

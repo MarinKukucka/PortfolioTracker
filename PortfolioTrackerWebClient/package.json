@@ -15,6 +15,7 @@
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-router": "^1.132.47",
     "antd": "^5.27.4",
+    "axios": "^1.12.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

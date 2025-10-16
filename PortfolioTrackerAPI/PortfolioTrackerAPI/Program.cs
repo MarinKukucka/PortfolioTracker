@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using PortfolioTrackerAPI.Features.Assets.Service;
 using PortfolioTrackerAPI.Features.Portfolios.Service;
 using PortfolioTrackerAPI.Features.Users.Service;
 using PortfolioTrackerAPI.Infrastructure.Context;
@@ -13,6 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("LocalDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -42,6 +53,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 builder.Services.AddScoped<ApplicationDbContextInitialiser>();
 
+builder.Services.AddScoped<IAssetService, AssetService>();
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -66,6 +78,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCors("LocalDev");
 
 app.UseHttpsRedirection();
 
