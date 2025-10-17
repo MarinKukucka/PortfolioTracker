@@ -7,12 +7,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const { Content } = AntLayout;
 
-interface Props {
-    children?: React.ReactNode;
-}
-
-function AppLayout({ children }: Props) {
-    const { user, isLoading } = useAuth0();
+function AppLayout() {
+    const { isLoading } = useAuth0();
 
     const [selectedKey, setSelectedKey] = useState("home");
     const [darkMode, setDarkMode] = useState(false);
@@ -39,9 +35,6 @@ function AppLayout({ children }: Props) {
                     />
                 </Sider>
                 <Content>
-                    <div>{user?.name}</div>
-                    {user?.email}
-                    {children}
                     <Outlet />
                 </Content>
             </AntLayout>
