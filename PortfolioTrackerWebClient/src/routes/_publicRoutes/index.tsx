@@ -11,7 +11,7 @@ function RouteComponent() {
     return (
         <>
             <div>Hello "/_publicRoutes/"!</div>
-            <div>{user?.id}</div>
+            <div>{user?.authId}</div>
             <div>{user?.email}</div>
             <div>{user?.displayName}</div>
         </>

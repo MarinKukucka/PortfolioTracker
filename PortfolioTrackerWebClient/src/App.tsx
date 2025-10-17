@@ -2,11 +2,13 @@ import "./App.css";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
     setupAuthInterceptor,
     setupAuthResponseInterceptor,
 } from "./api/apiClient";
+import { useCreateOrUpdateUserMutation } from "./api/users/users";
+import axios from "axios";
 
 const router = createRouter({
     routeTree,
@@ -22,6 +24,10 @@ declare module "@tanstack/react-router" {
 
 function App() {
     const auth = useAuth0();
+    const prevAuthRef = useRef<boolean>(auth.isAuthenticated);
+    const calledRef = useRef<boolean>(false);
+
+    const { mutateAsync: createOrUpdateUser } = useCreateOrUpdateUserMutation();
 
     useEffect(() => {
         if (!auth.getAccessTokenSilently) return;
@@ -38,6 +44,44 @@ function App() {
             ejectResponse();
         };
     }, [auth.getAccessTokenSilently]);
+
+    useEffect(() => {
+        async function callApiAfterLogin() {
+            try {
+                const userInfoRes = await axios.get(
+                    `https://${import.meta.env.VITE_AUTH0_DOMAIN}/userinfo`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${await auth.getAccessTokenSilently()}`,
+                        },
+                    }
+                );
+
+                console.log(userInfoRes);
+
+                await createOrUpdateUser({
+                    email: userInfoRes.data.email,
+                    name: userInfoRes.data.name,
+                });
+            } catch (err) {
+                console.error("Error with calling API on login: ", err);
+            }
+        }
+
+        if (auth.isLoading) return;
+
+        if (
+            !prevAuthRef.current &&
+            auth.isAuthenticated &&
+            !calledRef.current
+        ) {
+            calledRef.current = true;
+
+            callApiAfterLogin();
+        }
+
+        prevAuthRef.current = auth.isAuthenticated;
+    }, [auth, createOrUpdateUser]);
 
     return <RouterProvider context={{ auth }} router={router} />;
 }
