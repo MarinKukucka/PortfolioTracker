@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PortfolioTrackerAPI.Features.Users.DTOs;
 using PortfolioTrackerAPI.Features.Users.Service;
 using PortfolioTrackerAPI.Shared;
 
@@ -8,18 +9,18 @@ namespace PortfolioTrackerAPI.Features.Users
     [Authorize]
     public class UserController(IUserService _userService) : ApiController
     {
-        [HttpGet("me")]
-        public async Task<IActionResult> GetOrCreateUser(CancellationToken cancellationToken)
+        [HttpPut]
+        public async Task<IActionResult> CreateOrUpdateUser([FromBody] UserInfo userInfo, CancellationToken cancellationToken)
         {
-            var user = await _userService.GetOrCreateUserAsync(User, cancellationToken);
+            await _userService.CreateOrUpdateUserAsync(User, userInfo, cancellationToken);
 
-            return Ok(user);
+            return Ok();
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(string id, CancellationToken cancellationToken)
+        [HttpGet("{authId}")]
+        public async Task<IActionResult> GetUserById(string authId, CancellationToken cancellationToken)
         {
-            var user = await _userService.GetUserByIdAsync(id, cancellationToken);
+            var user = await _userService.GetUserByAuthIdAsync(authId, cancellationToken);
             
             return user is null ? NotFound() : Ok(user);
         }

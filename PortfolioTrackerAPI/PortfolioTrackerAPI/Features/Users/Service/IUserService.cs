@@ -5,8 +5,8 @@ namespace PortfolioTrackerAPI.Features.Users.Service
 {
     public interface IUserService
     {
-        Task<UserDTO> GetOrCreateUserAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default);
+        Task CreateOrUpdateUserAsync(ClaimsPrincipal principal, UserInfo userInfo, CancellationToken cancellationToken = default);
 
-        Task<UserDTO?> GetUserByIdAsync(string id, CancellationToken cancellationToken = default);
+        Task<UserDTO?> GetUserByAuthIdAsync(string authId, CancellationToken cancellationToken = default);
     }
 }

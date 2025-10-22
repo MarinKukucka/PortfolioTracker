@@ -12,24 +12,26 @@ namespace PortfolioTrackerAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Asset",
+                name: "Assets",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Symbol = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false)
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    ExternalId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Asset", x => x.Id);
+                    table.PrimaryKey("PK_Assets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AuthId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -41,21 +43,21 @@ namespace PortfolioTrackerAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PriceCache",
+                name: "PriceCaches",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", precision: 18, scale: 4, nullable: false),
                     LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PriceCache", x => x.Id);
+                    table.PrimaryKey("PK_PriceCaches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PriceCache_Asset_AssetId",
+                        name: "FK_PriceCaches_Assets_AssetId",
                         column: x => x.AssetId,
-                        principalTable: "Asset",
+                        principalTable: "Assets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -70,7 +72,7 @@ namespace PortfolioTrackerAPI.Migrations
                     IsDefault = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,9 +96,9 @@ namespace PortfolioTrackerAPI.Migrations
                 {
                     table.PrimaryKey("PK_AssetPortfolio", x => new { x.AssetsId, x.PortfoliosId });
                     table.ForeignKey(
-                        name: "FK_AssetPortfolio_Asset_AssetsId",
+                        name: "FK_AssetPortfolio_Assets_AssetsId",
                         column: x => x.AssetsId,
-                        principalTable: "Asset",
+                        principalTable: "Assets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -112,7 +114,7 @@ namespace PortfolioTrackerAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(28,8)", precision: 28, scale: 8, nullable: false),
                     PortfolioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -120,9 +122,9 @@ namespace PortfolioTrackerAPI.Migrations
                 {
                     table.PrimaryKey("PK_PortfolioAssets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PortfolioAssets_Asset_AssetId",
+                        name: "FK_PortfolioAssets_Assets_AssetId",
                         column: x => x.AssetId,
-                        principalTable: "Asset",
+                        principalTable: "Assets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -134,29 +136,29 @@ namespace PortfolioTrackerAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Transaction",
+                name: "Transactions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<decimal>(type: "decimal(28,8)", precision: 28, scale: 8, nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,4)", precision: 18, scale: 4, nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,4)", precision: 18, scale: 4, nullable: false),
                     TransactionDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PortfolioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transaction", x => x.Id);
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transaction_Asset_AssetId",
+                        name: "FK_Transactions_Assets_AssetId",
                         column: x => x.AssetId,
-                        principalTable: "Asset",
+                        principalTable: "Assets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transaction_Portfolios_PortfolioId",
+                        name: "FK_Transactions_Portfolios_PortfolioId",
                         column: x => x.PortfolioId,
                         principalTable: "Portfolios",
                         principalColumn: "Id",
@@ -184,19 +186,19 @@ namespace PortfolioTrackerAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PriceCache_AssetId",
-                table: "PriceCache",
+                name: "IX_PriceCaches_AssetId",
+                table: "PriceCaches",
                 column: "AssetId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_AssetId",
-                table: "Transaction",
+                name: "IX_Transactions_AssetId",
+                table: "Transactions",
                 column: "AssetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_PortfolioId",
-                table: "Transaction",
+                name: "IX_Transactions_PortfolioId",
+                table: "Transactions",
                 column: "PortfolioId");
         }
 
@@ -210,13 +212,13 @@ namespace PortfolioTrackerAPI.Migrations
                 name: "PortfolioAssets");
 
             migrationBuilder.DropTable(
-                name: "PriceCache");
+                name: "PriceCaches");
 
             migrationBuilder.DropTable(
-                name: "Transaction");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Asset");
+                name: "Assets");
 
             migrationBuilder.DropTable(
                 name: "Portfolios");

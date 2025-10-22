@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PortfolioTrackerAPI.Domain;
 using PortfolioTrackerAPI.Features.Users.DTOs;
 using PortfolioTrackerAPI.Infrastructure.Context;
@@ -9,20 +8,20 @@ namespace PortfolioTrackerAPI.Features.Users.Service
 {
     public class UserService(IApplicationDbContext _context) : IUserService
     {
-        public async Task<UserDTO> GetOrCreateUserAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
+        public async Task CreateOrUpdateUserAsync(ClaimsPrincipal principal, UserInfo userInfo, CancellationToken cancellationToken = default)
         {
             var sub = principal.FindFirst("sub")?.Value ?? principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(sub)) throw new ArgumentException("Authenticated user has no sub claim.");
 
-            var email = principal.FindFirst("email")?.Value;
-            var name = principal.FindFirst("name")?.Value;
+            var email = principal.FindFirst("email")?.Value ?? principal.FindFirst(ClaimTypes.Email)?.Value ?? userInfo.Email;
+            var name = principal.FindFirst("name")?.Value ?? principal.FindFirst(ClaimTypes.Name)?.Value ?? userInfo.Name;
             
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == sub, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == sub, cancellationToken);
             if (user is null)
             {
                 user = new User
                 {
-                    Id = sub,
+                    AuthId = sub,
                     Email = email ?? string.Empty,
                     DisplayName = name ?? string.Empty,
                     CreatedAt = DateTime.UtcNow
@@ -31,13 +30,6 @@ namespace PortfolioTrackerAPI.Features.Users.Service
                 _context.Users.Add(user);
                 
                 await _context.SaveChangesAsync(cancellationToken);
-
-                return new UserDTO
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    DisplayName = user.DisplayName
-                };
             }
             else
             {
@@ -55,24 +47,18 @@ namespace PortfolioTrackerAPI.Features.Users.Service
 
                     await _context.SaveChangesAsync(cancellationToken);
                 }
-
-                return new UserDTO
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    DisplayName = user.DisplayName
-                };
             }
         }
 
-        public async Task<UserDTO?> GetUserByIdAsync(string id, CancellationToken cancellationToken = default)
+        public async Task<UserDTO?> GetUserByAuthIdAsync(string authId, CancellationToken cancellationToken = default)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId, cancellationToken);
             if (user is null) return null;
 
             return new UserDTO
             {
                 Id = user.Id,
+                AuthId = user.AuthId,
                 Email = user.Email,
                 DisplayName = user.DisplayName
             };

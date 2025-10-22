@@ -1,4 +1,5 @@
-﻿using PortfolioTrackerAPI.Shared;
+﻿using Microsoft.EntityFrameworkCore;
+using PortfolioTrackerAPI.Shared;
 using PortfolioTrackerAPI.Shared.Enums;
 
 namespace PortfolioTrackerAPI.Domain
@@ -7,10 +8,13 @@ namespace PortfolioTrackerAPI.Domain
     {
         public required TransactionType Type { get; set; }
 
+        [Precision(28, 8)]
         public required decimal Quantity { get; set; }
 
+        [Precision(18, 4)]
         public required decimal UnitPrice { get; set; }
 
+        [Precision(18, 4)]
         public required decimal TotalPrice { get; set; }
 
         public required DateTime TransactionDateTime { get; set; }

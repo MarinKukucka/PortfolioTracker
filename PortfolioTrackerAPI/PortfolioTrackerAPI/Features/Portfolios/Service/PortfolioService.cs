@@ -17,7 +17,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
                 .Include(p => p.PortfolioAssets)
                 .Include(p => p.Assets)
                     .ThenInclude(a => a.PriceCache)
-                .Where(p => p.UserId == sub)
+                .Where(p => p.User != null && p.User.AuthId == sub)
                 .ToListAsync(cancellationToken);
 
             var portfolioDTOs = new List<PortfolioDTO>();
