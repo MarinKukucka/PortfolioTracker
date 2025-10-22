@@ -5,6 +5,6 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
 {
     public interface IPortfolioService
     {
-        Task<List<PortfolioDTO>> GetByUserIdAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default);
+        Task<List<PortfolioDTO>> GetPortfoliosAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default);
     }
 }

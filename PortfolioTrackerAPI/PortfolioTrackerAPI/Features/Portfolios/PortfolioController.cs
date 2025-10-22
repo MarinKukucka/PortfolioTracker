@@ -9,9 +9,9 @@ namespace PortfolioTrackerAPI.Features.Portfolios
     public class PortfolioController(IPortfolioService _portfolioService) : ApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetPortfoliosAsync(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetPortfolios(CancellationToken cancellationToken)
         {
-            var portfolios = await _portfolioService.GetByUserIdAsync(User, cancellationToken);
+            var portfolios = await _portfolioService.GetPortfoliosAsync(User, cancellationToken);
 
             return Ok(portfolios);
         }

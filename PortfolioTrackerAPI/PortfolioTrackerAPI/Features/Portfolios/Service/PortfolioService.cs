@@ -8,7 +8,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
 {
     public class PortfolioService(IApplicationDbContext _context) : IPortfolioService
     {
-        public async Task<List<PortfolioDTO>> GetByUserIdAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
+        public async Task<List<PortfolioDTO>> GetPortfoliosAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
         {
             var sub = principal.FindFirst("sub")?.Value ?? principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(sub)) throw new ArgumentException("Authenticated user has no sub claim.");
