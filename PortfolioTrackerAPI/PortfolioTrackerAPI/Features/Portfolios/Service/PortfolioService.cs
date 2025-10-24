@@ -68,5 +68,41 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
 
             return portfolioDTOs;
         }
+
+        public async Task CreatePortfolioAsync(CreatePortfolioCommand command, CancellationToken cancellationToken = default)
+        {
+            var userHasPortfolios = await _context.Portfolios
+                .Where(p => p.UserId == command.UserId)
+                .AnyAsync(cancellationToken);
+
+            var portfolio = new Portfolio
+            {
+                Name = command.Name,
+                Description = command.Description,
+                IsDefault = !userHasPortfolios,
+                CreatedAt = DateTime.UtcNow,
+                UserId = command.UserId,
+            };
+
+            _context.Portfolios.Add(portfolio);
+
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task UpdatePortfolioAsync(UpdatePortfolioCommand command, CancellationToken cancellationToken = default)
+        {
+            await _context.Portfolios
+                .Where(p => p.Id == command.Id)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(p => p.Name, command.Name)
+                    .SetProperty(p => p.Description, command.Description), cancellationToken);
+        }
+
+        public async Task DeletePortfolioAsync(Guid Id, CancellationToken cancellationToken = default)
+        {
+            await _context.Portfolios
+                .Where(p => p.Id == Id)
+                .ExecuteDeleteAsync(cancellationToken);
+        }
     }
 }
