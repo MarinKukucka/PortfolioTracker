@@ -3,7 +3,7 @@ using PortfolioTrackerAPI.Shared;
 
 namespace PortfolioTrackerAPI.Domain
 {
-    public class PortfolioAssets : BaseEntity
+    public class PortfolioAsset : BaseEntity
     {
         [Precision(28, 8)]
         public required decimal Quantity { get; set; }

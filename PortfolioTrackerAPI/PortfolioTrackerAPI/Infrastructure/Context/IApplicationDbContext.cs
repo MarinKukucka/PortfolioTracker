@@ -12,7 +12,7 @@ namespace PortfolioTrackerAPI.Infrastructure.Context
 
         public DbSet<Asset> Assets { get; }
 
-        public DbSet<PortfolioAssets> PortfolioAssets { get; }
+        public DbSet<PortfolioAsset> PortfolioAssets { get; }
 
         public DbSet<Transaction> Transactions { get; }
 

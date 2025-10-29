@@ -21,7 +21,7 @@ namespace PortfolioTrackerAPI.Domain
 
         public List<Asset> Assets { get; set; } = [];
 
-        public List<PortfolioAssets> PortfolioAssets { get; set; } = [];
+        public List<PortfolioAsset> PortfolioAssets { get; set; } = [];
 
         public List<Transaction> Transactions { get; set; } = [];
     }

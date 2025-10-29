@@ -1,6 +1,6 @@
 ﻿namespace PortfolioTrackerAPI.Features.Portfolios.DTO
 {
-    public class UpdatePortfolioCommand
+    public record UpdatePortfolioCommand
     {
         public required Guid Id { get; set; }
 

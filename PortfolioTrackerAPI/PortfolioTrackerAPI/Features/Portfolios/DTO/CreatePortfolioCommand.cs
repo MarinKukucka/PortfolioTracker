@@ -1,6 +1,6 @@
 ﻿namespace PortfolioTrackerAPI.Features.Portfolios.DTO
 {
-    public class CreatePortfolioCommand
+    public record CreatePortfolioCommand
     {
         public required string Name { get; set; }
 

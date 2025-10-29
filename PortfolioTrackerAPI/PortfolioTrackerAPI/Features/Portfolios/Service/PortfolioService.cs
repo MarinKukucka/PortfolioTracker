@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PortfolioTrackerAPI.Domain;
 using PortfolioTrackerAPI.Features.Portfolios.DTO;
 using PortfolioTrackerAPI.Infrastructure.Context;
