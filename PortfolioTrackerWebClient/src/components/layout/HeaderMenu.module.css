@@ -1,0 +1,41 @@
+.container {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 400px;
+}
+
+.logoLink {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    color: white !important;
+    margin: 0;
+}
+
+.menuContainer {
+    display: flex;
+    gap: 40px;
+}
+
+.linksContainer {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.link {
+    color: white;
+}
+
+.authButtonsContainer {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}

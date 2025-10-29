@@ -1,5 +1,6 @@
 import { SaveOutlined } from "@ant-design/icons";
 import { Button, Row } from "antd";
+import styles from "./FormButtons.module.css";
 
 interface Props {
     disabled: boolean;
@@ -7,13 +8,7 @@ interface Props {
 
 function FormButtons({ disabled }: Props) {
     return (
-        <Row
-            style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-            }}
-        >
+        <Row className={styles.container}>
             <Button type="primary" htmlType="submit" disabled={disabled}>
                 <SaveOutlined />
                 Create

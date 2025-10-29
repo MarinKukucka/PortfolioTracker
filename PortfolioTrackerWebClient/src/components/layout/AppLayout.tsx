@@ -4,6 +4,7 @@ import { theme as antdTheme, ConfigProvider, Layout as AntLayout } from "antd";
 import Sider from "antd/es/layout/Sider";
 import SiderMenu from "./SiderMenu";
 import { useAuth0 } from "@auth0/auth0-react";
+import styles from "./AppLayout.module.css";
 
 const { Content } = AntLayout;
 
@@ -25,7 +26,7 @@ function AppLayout() {
 
     return (
         <ConfigProvider theme={theme}>
-            <AntLayout style={{ minHeight: "100vh" }}>
+            <AntLayout className={styles.container}>
                 <Sider>
                     <SiderMenu
                         selectedKey={selectedKey}
@@ -38,7 +39,6 @@ function AppLayout() {
                     <Outlet />
                 </Content>
             </AntLayout>
-            <Outlet />
         </ConfigProvider>
     );
 }

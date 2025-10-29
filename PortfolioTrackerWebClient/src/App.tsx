@@ -57,8 +57,6 @@ function App() {
                     }
                 );
 
-                console.log(userInfoRes);
-
                 await createOrUpdateUser({
                     email: userInfoRes.data.email,
                     name: userInfoRes.data.name,

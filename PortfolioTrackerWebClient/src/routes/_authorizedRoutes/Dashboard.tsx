@@ -7,6 +7,8 @@ import { Button, Form, Input, Modal } from "antd";
 import { useCallback, useState } from "react";
 import type { CreatePortfolioCommand } from "../../api/portfolios/portfolioTypes";
 import FormButtons from "../../components/form/FormButtons";
+import PortfolioList from "../../components/portfolio/PortfolioList";
+import styles from "./Dashboard.module.css";
 
 export const Route = createFileRoute("/_authorizedRoutes/Dashboard")({
     component: RouteComponent,
@@ -22,20 +24,25 @@ function RouteComponent() {
 
     const onSubmit = useCallback(
         async (command: CreatePortfolioCommand) => {
-            await createPortfolio(command);
+            try {
+                await createPortfolio(command);
+
+                setIsCreateModalOpen(false);
+            } catch {
+                setIsCreateModalOpen(false);
+            }
         },
         [createPortfolio]
     );
 
     return (
         <>
-            <div>
-                {portfolios && portfolios?.length !== 0 ? (
-                    portfolios.map((p) => p.id)
-                ) : (
-                    <Button onClick={() => setIsCreateModalOpen(true)}>
-                        Add portfolio
-                    </Button>
+            <Button onClick={() => setIsCreateModalOpen(true)}>
+                Add portfolio
+            </Button>
+            <div className={styles.listContainer}>
+                {portfolios && portfolios?.length !== 0 && (
+                    <PortfolioList portfolios={portfolios} />
                 )}
             </div>
 
