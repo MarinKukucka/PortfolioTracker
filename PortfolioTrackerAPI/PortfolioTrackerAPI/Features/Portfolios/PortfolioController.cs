@@ -20,7 +20,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios
         [HttpPost]
         public async Task<IActionResult> CreatePortfolio([FromBody] CreatePortfolioCommand command, CancellationToken cancellationToken)
         {
-            await _portfolioService.CreatePortfolioAsync(command, cancellationToken);
+            await _portfolioService.CreatePortfolioAsync(User, command, cancellationToken);
 
             return Created();
         }

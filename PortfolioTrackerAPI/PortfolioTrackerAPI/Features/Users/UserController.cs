@@ -16,13 +16,5 @@ namespace PortfolioTrackerAPI.Features.Users
 
             return Ok();
         }
-
-        [HttpGet("{authId}")]
-        public async Task<IActionResult> GetUserById(string authId, CancellationToken cancellationToken)
-        {
-            var user = await _userService.GetUserByAuthIdAsync(authId, cancellationToken);
-            
-            return user is null ? NotFound() : Ok(user);
-        }
     }
 }

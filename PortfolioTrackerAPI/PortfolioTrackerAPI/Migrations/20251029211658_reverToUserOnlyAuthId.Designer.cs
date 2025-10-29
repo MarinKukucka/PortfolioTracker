@@ -12,8 +12,8 @@ using PortfolioTrackerAPI.Infrastructure.Context;
 namespace PortfolioTrackerAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251022150852_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251029211658_reverToUserOnlyAuthId")]
+    partial class reverToUserOnlyAuthId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,8 +88,9 @@ namespace PortfolioTrackerAPI.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -188,13 +189,8 @@ namespace PortfolioTrackerAPI.Migrations
 
             modelBuilder.Entity("PortfolioTrackerAPI.Domain.User", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AuthId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

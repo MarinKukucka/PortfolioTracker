@@ -1,10 +1,8 @@
-﻿using PortfolioTrackerAPI.Shared;
-
-namespace PortfolioTrackerAPI.Domain
+﻿namespace PortfolioTrackerAPI.Domain
 {
-    public class User : BaseEntity
+    public class User
     {
-        public required string AuthId { get; set; }
+        public required string Id { get; set; }
 
         public required string Email { get; set; }
 

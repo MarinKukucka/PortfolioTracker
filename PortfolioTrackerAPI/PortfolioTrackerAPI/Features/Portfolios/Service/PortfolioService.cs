@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using PortfolioTrackerAPI.Domain;
 using PortfolioTrackerAPI.Features.Portfolios.DTO;
 using PortfolioTrackerAPI.Infrastructure.Context;
@@ -17,7 +18,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
                 .Include(p => p.PortfolioAssets)
                 .Include(p => p.Assets)
                     .ThenInclude(a => a.PriceCache)
-                .Where(p => p.User != null && p.User.AuthId == sub)
+                .Where(p => p.UserId == sub)
                 .ToListAsync(cancellationToken);
 
             var portfolioDTOs = new List<PortfolioDTO>();
@@ -69,10 +70,13 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
             return portfolioDTOs;
         }
 
-        public async Task CreatePortfolioAsync(CreatePortfolioCommand command, CancellationToken cancellationToken = default)
+        public async Task CreatePortfolioAsync(ClaimsPrincipal principal, CreatePortfolioCommand command, CancellationToken cancellationToken = default)
         {
+            var sub = principal.FindFirst("sub")?.Value ?? principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(sub)) throw new ArgumentException("Authenticated user has no sub claim.");
+
             var userHasPortfolios = await _context.Portfolios
-                .Where(p => p.UserId == command.UserId)
+                .Where(p => p.UserId == sub)
                 .AnyAsync(cancellationToken);
 
             var portfolio = new Portfolio
@@ -81,7 +85,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
                 Description = command.Description,
                 IsDefault = !userHasPortfolios,
                 CreatedAt = DateTime.UtcNow,
-                UserId = command.UserId,
+                UserId = sub,
             };
 
             _context.Portfolios.Add(portfolio);

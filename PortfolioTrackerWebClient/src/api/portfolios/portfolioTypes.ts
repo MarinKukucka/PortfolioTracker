@@ -4,3 +4,14 @@ export type PortfolioDTO = {
     isDefault: boolean;
     value: number;
 }
+
+export type CreatePortfolioCommand = {
+    name: string;
+    description?: string;
+}
+
+export type UpdatePortfolioCommand = {
+    id: string;
+    name: string;
+    description?: string;
+}

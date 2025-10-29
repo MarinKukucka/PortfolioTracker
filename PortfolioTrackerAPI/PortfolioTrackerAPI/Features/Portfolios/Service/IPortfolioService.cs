@@ -7,7 +7,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
     {
         Task<List<PortfolioDTO>> GetPortfoliosAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default);
 
-        Task CreatePortfolioAsync(CreatePortfolioCommand command, CancellationToken cancellationToken = default);
+        Task CreatePortfolioAsync(ClaimsPrincipal principal, CreatePortfolioCommand command, CancellationToken cancellationToken = default);
 
         Task UpdatePortfolioAsync(UpdatePortfolioCommand command, CancellationToken cancellationToken = default);
 

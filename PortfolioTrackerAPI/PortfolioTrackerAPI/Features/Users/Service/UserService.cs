@@ -16,12 +16,12 @@ namespace PortfolioTrackerAPI.Features.Users.Service
             var email = principal.FindFirst("email")?.Value ?? principal.FindFirst(ClaimTypes.Email)?.Value ?? userInfo.Email;
             var name = principal.FindFirst("name")?.Value ?? principal.FindFirst(ClaimTypes.Name)?.Value ?? userInfo.Name;
             
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == sub, cancellationToken);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == sub, cancellationToken);
             if (user is null)
             {
                 user = new User
                 {
-                    AuthId = sub,
+                    Id = sub,
                     Email = email ?? string.Empty,
                     DisplayName = name ?? string.Empty,
                     CreatedAt = DateTime.UtcNow
@@ -48,20 +48,6 @@ namespace PortfolioTrackerAPI.Features.Users.Service
                     await _context.SaveChangesAsync(cancellationToken);
                 }
             }
-        }
-
-        public async Task<UserDTO?> GetUserByAuthIdAsync(string authId, CancellationToken cancellationToken = default)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId, cancellationToken);
-            if (user is null) return null;
-
-            return new UserDTO
-            {
-                Id = user.Id,
-                AuthId = user.AuthId,
-                Email = user.Email,
-                DisplayName = user.DisplayName
-            };
         }
     }
 }
