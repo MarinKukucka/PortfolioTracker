@@ -17,6 +17,14 @@ namespace PortfolioTrackerAPI.Features.Portfolios
             return Ok(portfolios);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPortfolioById(Guid id, CancellationToken cancellationToken)
+        {
+            var portfolio = await _portfolioService.GetPortfolioByIdAsync(id, cancellationToken);
+
+            return Ok(portfolio);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreatePortfolio([FromBody] CreatePortfolioCommand command, CancellationToken cancellationToken)
         {

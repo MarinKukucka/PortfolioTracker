@@ -1,13 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createPortfolio, deletePortfolio, getPortoflios, updatePortfolio } from "./portfolioApi";
+import { createPortfolio, deletePortfolio, getPortfolioById, getPortoflios, updatePortfolio } from "./portfolioApi";
 import type { CreatePortfolioCommand, UpdatePortfolioCommand } from "./portfolioTypes";
 import { message } from "antd";
 
 export const useFetchPortfolios = () => {
     return useQuery({
         queryKey: ['portfolios'],
-        queryFn: async ({signal}) => {
+        queryFn: async ({ signal }) => {
             return await getPortoflios(signal);
+        }
+    })
+}
+
+export const useFetchPortfolioById = (id: string) => {
+    return useQuery({
+        queryKey: ['portfolios', id],
+        queryFn: async ({ signal} ) => {
+            return await getPortfolioById(id, signal);
         }
     })
 }

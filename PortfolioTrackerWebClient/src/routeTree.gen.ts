@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthorizedRoutesRouteImport } from './routes/_authorizedRoutes'
 import { Route as PublicRoutesIndexRouteImport } from './routes/_publicRoutes/index'
 import { Route as AuthorizedRoutesDashboardRouteImport } from './routes/_authorizedRoutes/Dashboard'
+import { Route as AuthorizedRoutesPortfoliosIdIndexRouteImport } from './routes/_authorizedRoutes/Portfolios/$id/index'
 
 const AuthorizedRoutesRoute = AuthorizedRoutesRouteImport.update({
   id: '/_authorizedRoutes',
@@ -28,31 +29,41 @@ const AuthorizedRoutesDashboardRoute =
     path: '/Dashboard',
     getParentRoute: () => AuthorizedRoutesRoute,
   } as any)
+const AuthorizedRoutesPortfoliosIdIndexRoute =
+  AuthorizedRoutesPortfoliosIdIndexRouteImport.update({
+    id: '/Portfolios/$id/',
+    path: '/Portfolios/$id/',
+    getParentRoute: () => AuthorizedRoutesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/Dashboard': typeof AuthorizedRoutesDashboardRoute
   '/': typeof PublicRoutesIndexRoute
+  '/Portfolios/$id': typeof AuthorizedRoutesPortfoliosIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/Dashboard': typeof AuthorizedRoutesDashboardRoute
   '/': typeof PublicRoutesIndexRoute
+  '/Portfolios/$id': typeof AuthorizedRoutesPortfoliosIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authorizedRoutes': typeof AuthorizedRoutesRouteWithChildren
   '/_authorizedRoutes/Dashboard': typeof AuthorizedRoutesDashboardRoute
   '/_publicRoutes/': typeof PublicRoutesIndexRoute
+  '/_authorizedRoutes/Portfolios/$id/': typeof AuthorizedRoutesPortfoliosIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/Dashboard' | '/'
+  fullPaths: '/Dashboard' | '/' | '/Portfolios/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/Dashboard' | '/'
+  to: '/Dashboard' | '/' | '/Portfolios/$id'
   id:
     | '__root__'
     | '/_authorizedRoutes'
     | '/_authorizedRoutes/Dashboard'
     | '/_publicRoutes/'
+    | '/_authorizedRoutes/Portfolios/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -83,15 +94,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedRoutesDashboardRouteImport
       parentRoute: typeof AuthorizedRoutesRoute
     }
+    '/_authorizedRoutes/Portfolios/$id/': {
+      id: '/_authorizedRoutes/Portfolios/$id/'
+      path: '/Portfolios/$id'
+      fullPath: '/Portfolios/$id'
+      preLoaderRoute: typeof AuthorizedRoutesPortfoliosIdIndexRouteImport
+      parentRoute: typeof AuthorizedRoutesRoute
+    }
   }
 }
 
 interface AuthorizedRoutesRouteChildren {
   AuthorizedRoutesDashboardRoute: typeof AuthorizedRoutesDashboardRoute
+  AuthorizedRoutesPortfoliosIdIndexRoute: typeof AuthorizedRoutesPortfoliosIdIndexRoute
 }
 
 const AuthorizedRoutesRouteChildren: AuthorizedRoutesRouteChildren = {
   AuthorizedRoutesDashboardRoute: AuthorizedRoutesDashboardRoute,
+  AuthorizedRoutesPortfoliosIdIndexRoute:
+    AuthorizedRoutesPortfoliosIdIndexRoute,
 }
 
 const AuthorizedRoutesRouteWithChildren =

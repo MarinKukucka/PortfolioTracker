@@ -7,6 +7,12 @@ export async function getPortoflios(signal?: AbortSignal): Promise<PortfolioDTO[
     return res.data;
 }
 
+export async function getPortfolioById(id: string, signal?: AbortSignal): Promise<PortfolioDTO> {
+    const res = await api.get(`/api/portfolio/${id}`, { signal })
+
+    return res.data;
+}
+
 export async function createPortfolio(command: CreatePortfolioCommand, signal?: AbortSignal): Promise<void> {
     await api.post(`/api/portfolio`, command, { signal });
 }
