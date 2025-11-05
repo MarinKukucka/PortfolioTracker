@@ -2,11 +2,17 @@
 using PortfolioTrackerAPI.Domain;
 using PortfolioTrackerAPI.Features.Portfolios.DTO;
 using PortfolioTrackerAPI.Infrastructure.Context;
+using PortfolioTrackerAPI.Infrastructure.Services.ApiServices.CoinGecko;
+using PortfolioTrackerAPI.Infrastructure.Services.ApiServices.Finnhub;
+using PortfolioTrackerAPI.Shared.Enums;
 using System.Security.Claims;
 
 namespace PortfolioTrackerAPI.Features.Portfolios.Service
 {
-    public class PortfolioService(IApplicationDbContext _context) : IPortfolioService
+    public class PortfolioService(
+        IApplicationDbContext _context, 
+        ICoinGeckoService _coingGeckoService, 
+        IFinnhubService _finnhubService) : IPortfolioService
     {
         public async Task<List<PortfolioDTO>> GetPortfoliosAsync(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
         {
@@ -30,7 +36,15 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
                 {
                     if(portfolioAsset.Asset?.PriceCache?.LastUpdatedAt < DateTime.UtcNow.AddMinutes(-15) || portfolioAsset.Asset is null || portfolioAsset.Asset.PriceCache is null)
                     {
-                        var assetPrice = 0m;// Call API to update price
+                        var asset = portfolioAsset.Asset;
+
+                        var assetPrice = asset?.Type switch
+                        {
+                            AssetType.CryptoCurrency => await _coingGeckoService.GetCurrentCryptoPriceByIdAsync(asset.ExternalId, cancellationToken),
+                            AssetType.Stock => await _finnhubService.GetCurrentStockPriceByIdAsync(asset.ExternalId, cancellationToken),
+                            _ => 0m
+                        } ?? throw new HttpRequestException($"Failed to retrieve price for asset with ExternalId: {asset?.ExternalId}");
+
                         portfolioValue += portfolioAsset.Quantity * assetPrice;
 
                         if(portfolioAsset.Asset?.PriceCache is null)
