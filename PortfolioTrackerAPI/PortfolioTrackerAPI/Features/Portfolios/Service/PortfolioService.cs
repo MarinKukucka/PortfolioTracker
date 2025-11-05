@@ -50,14 +50,28 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
                 .Where(p => p.Id == id)
                 .FirstOrDefaultAsync(cancellationToken) ?? throw new ArgumentException("Portfolio not found.");
 
-            var portfolioValue = await PortfolioCalculator.CalculatePortolioValue(portfolio, _context, _coingGeckoService, _finnhubService, cancellationToken);
+            var portfolioAssets = new List<PortfolioAssetDTO>();
+
+            foreach (var portfolioAsset in portfolio.PortfolioAssets)
+            {
+                if(portfolioAsset.Asset is not null)
+                {
+                    portfolioAssets.Add(new PortfolioAssetDTO
+                    {
+                        Quantity = portfolioAsset.Quantity,
+                        AssetSymbol = portfolioAsset.Asset.Symbol,
+                        Value = await PriceUtils.FetchAssetValue(portfolioAsset, _context, _coingGeckoService, _finnhubService, cancellationToken)
+                    });
+                }
+            }
 
             return new PortfolioDTO
             {
                 Id = portfolio.Id,
                 Name = portfolio.Name,
                 IsDefault = portfolio.IsDefault,
-                Value = portfolioValue
+                Value = portfolioAssets.Sum(pa => pa.Value),
+                Assets = portfolioAssets
             };
         }
 

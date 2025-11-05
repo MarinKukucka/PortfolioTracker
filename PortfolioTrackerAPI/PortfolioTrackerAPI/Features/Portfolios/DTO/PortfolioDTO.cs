@@ -9,5 +9,7 @@
         public required bool IsDefault { get; set; }
 
         public decimal? Value { get; set; }
+
+        public List<PortfolioAssetDTO>? Assets { get; set; }
     }
 }

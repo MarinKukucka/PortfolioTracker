@@ -3,6 +3,13 @@ export type PortfolioDTO = {
     name: string;
     isDefault: boolean;
     value: number;
+    assets: PortfolioAssetDTO[];
+}
+
+export type PortfolioAssetDTO = {
+    quantity: number;
+    assetSymbol: string;
+    value: number;
 }
 
 export type CreatePortfolioCommand = {
