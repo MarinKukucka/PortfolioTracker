@@ -6,9 +6,9 @@ import {
 import { Button, Form, Input, Modal } from "antd";
 import { useCallback, useState } from "react";
 import type { CreatePortfolioCommand } from "../../api/portfolios/portfolioTypes";
-import FormButtons from "../../components/form/FormButtons";
-import PortfolioList from "../../components/portfolio/PortfolioList";
+import FormButtons from "../../components/form/FormButtons/FormButtons";
 import styles from "./Dashboard.module.css";
+import PortfolioList from "../../components/portfolio/PortfolioList/PortfolioList";
 
 export const Route = createFileRoute("/_authorizedRoutes/Dashboard")({
     component: RouteComponent,

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Header } from "antd/es/layout/layout";
-import logo from "../../assets/logo.png";
+import logo from "../../../assets/logo.png";
 import { Button, Typography } from "antd";
 import { useAuth0 } from "@auth0/auth0-react";
 import styles from "./HeaderMenu.module.css";

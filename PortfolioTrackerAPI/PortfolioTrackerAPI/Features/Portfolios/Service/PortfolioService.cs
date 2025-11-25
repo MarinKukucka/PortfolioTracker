@@ -60,7 +60,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
                     {
                         Quantity = portfolioAsset.Quantity,
                         AssetSymbol = portfolioAsset.Asset.Symbol,
-                        Value = await PriceUtils.FetchAssetValue(portfolioAsset, _context, _coingGeckoService, _finnhubService, cancellationToken)
+                        Value = Math.Round(await PriceUtils.FetchAssetValue(portfolioAsset, _context, _coingGeckoService, _finnhubService, cancellationToken), 2)
                     });
                 }
             }

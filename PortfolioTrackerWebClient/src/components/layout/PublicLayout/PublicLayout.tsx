@@ -1,8 +1,8 @@
 import { Outlet } from "@tanstack/react-router";
 import { Layout as AntdLayout } from "antd";
 import { Content, Footer } from "antd/es/layout/layout";
-import HeaderMenu from "./HeaderMenu";
 import styles from "./PublicLayout.module.css";
+import HeaderMenu from "../HeaderMenu/HeaderMenu";
 
 function PublicLayout() {
     return (

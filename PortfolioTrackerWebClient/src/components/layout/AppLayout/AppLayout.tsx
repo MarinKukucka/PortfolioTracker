@@ -2,9 +2,9 @@ import { Outlet } from "@tanstack/react-router";
 import { useState } from "react";
 import { theme as antdTheme, ConfigProvider, Layout as AntLayout } from "antd";
 import Sider from "antd/es/layout/Sider";
-import SiderMenu from "./SiderMenu";
 import { useAuth0 } from "@auth0/auth0-react";
 import styles from "./AppLayout.module.css";
+import SiderMenu from "../SiderMenu/SiderMenu";
 
 const { Content } = AntLayout;
 

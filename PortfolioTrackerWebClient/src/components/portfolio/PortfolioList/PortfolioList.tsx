@@ -1,6 +1,6 @@
 import { List } from "antd";
-import type { PortfolioDTO } from "../../api/portfolios/portfolioTypes";
 import { useNavigate } from "@tanstack/react-router";
+import type { PortfolioDTO } from "../../../api/portfolios/portfolioTypes";
 
 interface Props {
     portfolios: PortfolioDTO[];
