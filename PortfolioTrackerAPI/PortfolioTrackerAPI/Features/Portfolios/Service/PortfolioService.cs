@@ -21,7 +21,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
 
             var portfolios = await _context.Portfolios
                 .Include(p => p.PortfolioAssets)
-                .Include(p => p.Assets)
+                    .ThenInclude(pa => pa.Asset)
                     .ThenInclude(a => a.PriceCache)
                 .Where(p => p.UserId == sub)
                 .ToListAsync(cancellationToken);
@@ -45,7 +45,7 @@ namespace PortfolioTrackerAPI.Features.Portfolios.Service
         {
             var portfolio = await _context.Portfolios
                 .Include(p => p.PortfolioAssets)
-                .Include(p => p.Assets)
+                    .ThenInclude(pa => pa.Asset)
                     .ThenInclude(a => a.PriceCache)
                 .Where(p => p.Id == id)
                 .FirstOrDefaultAsync(cancellationToken) ?? throw new ArgumentException("Portfolio not found.");

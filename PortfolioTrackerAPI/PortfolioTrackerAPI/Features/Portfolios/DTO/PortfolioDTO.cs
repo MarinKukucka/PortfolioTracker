@@ -1,4 +1,7 @@
-﻿namespace PortfolioTrackerAPI.Features.Portfolios.DTO
+﻿using PortfolioTrackerAPI.Shared;
+using System.Text.Json.Serialization;
+
+namespace PortfolioTrackerAPI.Features.Portfolios.DTO
 {
     public class PortfolioDTO
     {

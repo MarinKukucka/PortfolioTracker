@@ -8,12 +8,12 @@ namespace PortfolioTrackerAPI.Features.Assets
     [Authorize]
     public class AssetController(IAssetService _assetService) : ApiController
     {
-        [HttpGet]
-        public async Task<IActionResult> GetAllAssetsAsync(CancellationToken cancellationToken)
+        [HttpGet("options")]
+        public async Task<IActionResult> GetAssetOptions(CancellationToken cancellationToken)
         {
-            var assets = await _assetService.GetAllAssetsAsync(cancellationToken);
+            var assetOptions = await _assetService.GetAssetOptionsAsync(cancellationToken);
 
-            return Ok(assets);
+            return Ok(assetOptions);
         }
     }
 }

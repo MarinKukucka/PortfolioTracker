@@ -12,6 +12,7 @@ namespace PortfolioTrackerAPI.Features.Transactions.Service
         public async Task AddTransactionAsync(ClaimsPrincipal principal, AddTransactionCommand command, CancellationToken cancellationToken = default)
         {
             var portfolio = await _context.Portfolios
+                .Include(p => p.PortfolioAssets)
                 .Where(p => p.Id == command.PortfolioId)
                 .FirstOrDefaultAsync(cancellationToken) ?? throw new ArgumentException("Portfolio not found.");
 

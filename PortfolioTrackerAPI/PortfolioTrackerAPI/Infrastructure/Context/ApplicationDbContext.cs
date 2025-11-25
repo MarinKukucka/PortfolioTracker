@@ -20,6 +20,9 @@ namespace PortfolioTrackerAPI.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PortfolioAsset>()
+                .HasKey(pa => new { pa.PortfolioId, pa.AssetId });
+
             base.OnModelCreating(modelBuilder);
         }
 

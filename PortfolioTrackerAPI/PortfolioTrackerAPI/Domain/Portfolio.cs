@@ -19,7 +19,6 @@ namespace PortfolioTrackerAPI.Domain
         public User? User { get; set; }
 
 
-        public List<Asset> Assets { get; set; } = [];
 
         public List<PortfolioAsset> PortfolioAssets { get; set; } = [];
 

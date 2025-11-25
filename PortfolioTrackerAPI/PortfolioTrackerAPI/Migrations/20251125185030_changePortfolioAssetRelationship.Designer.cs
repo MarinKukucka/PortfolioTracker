@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortfolioTrackerAPI.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using PortfolioTrackerAPI.Infrastructure.Context;
 namespace PortfolioTrackerAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251125185030_changePortfolioAssetRelationship")]
+    partial class changePortfolioAssetRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,19 +86,25 @@ namespace PortfolioTrackerAPI.Migrations
 
             modelBuilder.Entity("PortfolioTrackerAPI.Domain.PortfolioAsset", b =>
                 {
-                    b.Property<Guid>("PortfolioId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AssetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PortfolioId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Quantity")
                         .HasPrecision(28, 8)
                         .HasColumnType("decimal(28,8)");
 
-                    b.HasKey("PortfolioId", "AssetId");
+                    b.HasKey("Id");
 
                     b.HasIndex("AssetId");
+
+                    b.HasIndex("PortfolioId");
 
                     b.ToTable("PortfolioAssets");
                 });

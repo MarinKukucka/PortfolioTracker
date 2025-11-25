@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PortfolioTrackerAPI.Shared;
 
 namespace PortfolioTrackerAPI.Domain
 {
-    public class PortfolioAsset : BaseEntity
+    public class PortfolioAsset
     {
         [Precision(28, 8)]
         public required decimal Quantity { get; set; }

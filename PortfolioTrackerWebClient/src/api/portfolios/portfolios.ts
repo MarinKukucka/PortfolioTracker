@@ -14,7 +14,7 @@ export const useFetchPortfolios = () => {
 
 export const useFetchPortfolioById = (id: string) => {
     return useQuery({
-        queryKey: ['portfolios', id],
+        queryKey: ['portfolio', id],
         queryFn: async ({ signal} ) => {
             return await getPortfolioById(id, signal);
         }

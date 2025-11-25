@@ -7,12 +7,17 @@ using PortfolioTrackerAPI.Features.Users.Service;
 using PortfolioTrackerAPI.Infrastructure.Context;
 using PortfolioTrackerAPI.Infrastructure.Services.ApiServices.CoinGecko;
 using PortfolioTrackerAPI.Infrastructure.Services.ApiServices.Finnhub;
+using PortfolioTrackerAPI.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new UpperCaseGuidConverter());
+    });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
