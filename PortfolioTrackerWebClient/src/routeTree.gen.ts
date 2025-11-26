@@ -13,6 +13,7 @@ import { Route as AuthorizedRoutesRouteImport } from './routes/_authorizedRoutes
 import { Route as PublicRoutesIndexRouteImport } from './routes/_publicRoutes/index'
 import { Route as AuthorizedRoutesDashboardRouteImport } from './routes/_authorizedRoutes/Dashboard'
 import { Route as AuthorizedRoutesPortfoliosIdIndexRouteImport } from './routes/_authorizedRoutes/Portfolios/$id/index'
+import { Route as AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRouteImport } from './routes/_authorizedRoutes/Portfolios/$id/Transactions/$assetId/index'
 
 const AuthorizedRoutesRoute = AuthorizedRoutesRouteImport.update({
   id: '/_authorizedRoutes',
@@ -35,16 +36,24 @@ const AuthorizedRoutesPortfoliosIdIndexRoute =
     path: '/Portfolios/$id/',
     getParentRoute: () => AuthorizedRoutesRoute,
   } as any)
+const AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRoute =
+  AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRouteImport.update({
+    id: '/Portfolios/$id/Transactions/$assetId/',
+    path: '/Portfolios/$id/Transactions/$assetId/',
+    getParentRoute: () => AuthorizedRoutesRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/Dashboard': typeof AuthorizedRoutesDashboardRoute
   '/': typeof PublicRoutesIndexRoute
   '/Portfolios/$id': typeof AuthorizedRoutesPortfoliosIdIndexRoute
+  '/Portfolios/$id/Transactions/$assetId': typeof AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/Dashboard': typeof AuthorizedRoutesDashboardRoute
   '/': typeof PublicRoutesIndexRoute
   '/Portfolios/$id': typeof AuthorizedRoutesPortfoliosIdIndexRoute
+  '/Portfolios/$id/Transactions/$assetId': typeof AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -52,18 +61,28 @@ export interface FileRoutesById {
   '/_authorizedRoutes/Dashboard': typeof AuthorizedRoutesDashboardRoute
   '/_publicRoutes/': typeof PublicRoutesIndexRoute
   '/_authorizedRoutes/Portfolios/$id/': typeof AuthorizedRoutesPortfoliosIdIndexRoute
+  '/_authorizedRoutes/Portfolios/$id/Transactions/$assetId/': typeof AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/Dashboard' | '/' | '/Portfolios/$id'
+  fullPaths:
+    | '/Dashboard'
+    | '/'
+    | '/Portfolios/$id'
+    | '/Portfolios/$id/Transactions/$assetId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/Dashboard' | '/' | '/Portfolios/$id'
+  to:
+    | '/Dashboard'
+    | '/'
+    | '/Portfolios/$id'
+    | '/Portfolios/$id/Transactions/$assetId'
   id:
     | '__root__'
     | '/_authorizedRoutes'
     | '/_authorizedRoutes/Dashboard'
     | '/_publicRoutes/'
     | '/_authorizedRoutes/Portfolios/$id/'
+    | '/_authorizedRoutes/Portfolios/$id/Transactions/$assetId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -101,18 +120,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthorizedRoutesPortfoliosIdIndexRouteImport
       parentRoute: typeof AuthorizedRoutesRoute
     }
+    '/_authorizedRoutes/Portfolios/$id/Transactions/$assetId/': {
+      id: '/_authorizedRoutes/Portfolios/$id/Transactions/$assetId/'
+      path: '/Portfolios/$id/Transactions/$assetId'
+      fullPath: '/Portfolios/$id/Transactions/$assetId'
+      preLoaderRoute: typeof AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRouteImport
+      parentRoute: typeof AuthorizedRoutesRoute
+    }
   }
 }
 
 interface AuthorizedRoutesRouteChildren {
   AuthorizedRoutesDashboardRoute: typeof AuthorizedRoutesDashboardRoute
   AuthorizedRoutesPortfoliosIdIndexRoute: typeof AuthorizedRoutesPortfoliosIdIndexRoute
+  AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRoute: typeof AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRoute
 }
 
 const AuthorizedRoutesRouteChildren: AuthorizedRoutesRouteChildren = {
   AuthorizedRoutesDashboardRoute: AuthorizedRoutesDashboardRoute,
   AuthorizedRoutesPortfoliosIdIndexRoute:
     AuthorizedRoutesPortfoliosIdIndexRoute,
+  AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRoute:
+    AuthorizedRoutesPortfoliosIdTransactionsAssetIdIndexRoute,
 }
 
 const AuthorizedRoutesRouteWithChildren =

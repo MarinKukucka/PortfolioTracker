@@ -1,7 +1,16 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import type { AddTransactionCommand } from "./transactionTypes"
-import { addTransaction } from "./transactionApi"
+import { addTransaction, getTransactionsByPortfolioAndAssetId } from "./transactionApi"
 import { message } from "antd";
+
+export const useFetchTransactionsByPortfolioAndAssetId = (portfolioId: string, assetId: string) => {
+    return useQuery({
+        queryKey: ['transactions', portfolioId, assetId],
+        queryFn: async ({signal}) => {
+            return await getTransactionsByPortfolioAndAssetId(portfolioId, assetId, signal);
+        }
+    })
+}
 
 export const useAddTransactionMutation = () => {
     const queryClient = useQueryClient();

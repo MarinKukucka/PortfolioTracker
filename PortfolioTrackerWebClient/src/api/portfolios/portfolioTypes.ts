@@ -10,6 +10,7 @@ export type PortfolioAssetDTO = {
     quantity: number;
     assetSymbol: string;
     value: number;
+    assetId: string;
 }
 
 export type CreatePortfolioCommand = {

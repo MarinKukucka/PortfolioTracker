@@ -3,13 +3,30 @@ using PortfolioTrackerAPI.Domain;
 using PortfolioTrackerAPI.Features.Transactions.DTO;
 using PortfolioTrackerAPI.Infrastructure.Context;
 using PortfolioTrackerAPI.Shared.Enums;
-using System.Security.Claims;
 
 namespace PortfolioTrackerAPI.Features.Transactions.Service
 {
     public class TransactionService(IApplicationDbContext _context) : ITransactionService
     {
-        public async Task AddTransactionAsync(ClaimsPrincipal principal, AddTransactionCommand command, CancellationToken cancellationToken = default)
+        public async Task<List<TransactionDTO>> GetTransactionsByPortfolioAndAssetIdAsync(Guid portfolioId, Guid assetId, CancellationToken cancellationToken = default)
+        {
+            var transactions = await _context.Transactions
+                .Where(t => t.PortfolioId == portfolioId && t.AssetId == assetId)
+                .Select(t => new TransactionDTO
+                {
+                    Id = t.Id,
+                    Type = t.Type,
+                    Quantity = t.Quantity,
+                    UnitPrice = t.UnitPrice,
+                    TotalPrice = t.TotalPrice,
+                    TransactionDateTime = t.TransactionDateTime
+                })
+                .ToListAsync(cancellationToken);
+
+            return transactions;
+        }
+
+        public async Task AddTransactionAsync(AddTransactionCommand command, CancellationToken cancellationToken = default)
         {
             var portfolio = await _context.Portfolios
                 .Include(p => p.PortfolioAssets)

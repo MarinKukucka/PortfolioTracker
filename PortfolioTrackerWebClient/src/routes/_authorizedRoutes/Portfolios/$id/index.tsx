@@ -45,7 +45,7 @@ function PortfolioPage() {
         <>
             <div className={styles.container}>
                 <PortfolioHeader value={portfolio.value} />
-                <PortfolioAssets assets={portfolio.assets} />
+                <PortfolioAssets assets={portfolio.assets} portfolioId={id} />
 
                 <Button onClick={() => setIsModalOpen(true)}>
                     Add transaction

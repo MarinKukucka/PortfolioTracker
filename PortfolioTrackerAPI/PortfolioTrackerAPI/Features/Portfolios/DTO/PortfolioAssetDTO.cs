@@ -7,5 +7,7 @@
         public required string AssetSymbol { get; set; }
 
         public required decimal Value { get; set; }
+
+        public required Guid AssetId { get; set; }
     }
 }
