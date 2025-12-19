@@ -27,7 +27,7 @@ function AppLayout() {
     return (
         <ConfigProvider theme={theme}>
             <AntLayout className={styles.container}>
-                <Sider>
+                <Sider theme={darkMode ? "dark" : "light"}>
                     <SiderMenu
                         selectedKey={selectedKey}
                         setSelectedKey={setSelectedKey}
